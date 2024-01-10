@@ -11,9 +11,7 @@ const employeeSchema = new mongoose.Schema(
       enum: [
         "Admin",
         "Sales",
-        "Accounts",
-        "Customer Care",
-        "Services",
+        "HR",
       ],
       default: "Sales", // Set a default role if not provided
       required: true,

@@ -48,7 +48,7 @@ const upload = multer({ storage: storage });
 
 router.post('/addCustomer', upload.none(),salesController.addCustomer);
 
-router.post('/saveAndTransfer',upload.none(), salesController.saveAndTransfer);
+
 
 // ... (your other routes)
 

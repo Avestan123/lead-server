@@ -26,6 +26,7 @@ const addCustomer = async (req, res) => {
       contactPerson,
       gst,
       source,
+      sourceurl,
       otherSource,
       pin,
       dob,
@@ -89,19 +90,14 @@ const addCustomer = async (req, res) => {
       clientName,
       email,
       number,
-      altNumber,
+     
       address,
-      city,
+    
       requirement,
       remarks,
-      clientlevel,
-      state,
-      contactPerson,
-      gst,
       source,
-      otherSource,
+      sourceurl,
       pin,
-      dob,
       followUpDate,
       // additionalFollowups : additionalFollowups,
       latestFollowUpDate:followUpDate,
@@ -120,136 +116,7 @@ const addCustomer = async (req, res) => {
 };
 
 
-const saveAndTransfer = async (req, res)=> {
-  try {
-    const userId = req.user._id;
-    const {
-      clientName,
-      email,
-      number,
-      altNumber,
-      address,
-      city,
-      requirement,
-      remarks,
-      clientlevel,
-      state,
-      contactPerson,
-      gst,
-      source,
-      otherSource,
-      pin,
-      dob,
-      followUpDate
-    } = req.body;
 
-    
-    if (!clientName) {
-      return res.status(400).json({ error: 'Client Name is required'});
-    }
-    if (!number) {
-      return res.status(400).json({ error: 'Number is required'});
-    }
-    const existingCustomer = await Customers.findOne({ number: number });
-    if (existingCustomer) {
-      return res.status(409).json({ error: 'Customer already exists with the number'})
-    }
-    if (!address) {
-      return res.status(400).json({ error: 'Address is required'});
-    }
-    if (!state) {
-      return res.status(400).json({ error: 'State is required'});
-    }
-    if (!city) {
-      return res.status(400).json({ error: 'City is required'});
-    }
-    // if (!pin) {
-    //   return res.status(400).json({ error: 'Pin is required'});
-    // }
-    // if (!dob) {
-    //   return res.status(400).json({ error: 'Date Of Birth is required'});
-    // }
-    if (!followUpDate) {
-      return res.status(400).json({ error: 'Follow Up Date is required'});
-    }
-    if (!requirement) {
-      return res.status(400).json({ error: 'Requirement is required'});
-    }
-    if (!remarks) {
-      return res.status(400).json({ error: 'Remarks is required'});
-    }
-    if (!clientlevel) {
-      return res.status(400).json({ error: 'Client Level is required'});
-    }
-    if (!source) {
-      return res.status(400).json({ error: 'Source is required'});
-    }
-
-    // console.log("Client",req.body);
-
-    // if (!req.files || !req.files['electricityBill']) {
-    //     return res.status(400).json({ error: 'Electricity bill is required' });
-    // }
-
-    // const electricityBillFilename = req.files["electricityBill"]
-    //   ? req.files["electricityBill"][0].filename
-    //   : null;
-
-    // const pancardFilename = req.files["pancard"]
-    //   ? req.files["pancard"][0].filename
-    //   : null;
-    // const adharcardFilename = req.files["adharcard"]
-    //   ? req.files["adharcard"][0].filename
-    //   : null;
-    // const textRecipeFilename = req.files["textRecipe"]
-    //   ? req.files["textRecipe"][0].filename
-    //   : null;
-
-    // const additionalFollowups = [{followUpDate : followUpDate, remarks : "default"}]
-    const getUser = await Employees.findOne({ employeeRole: "Admin"});
-    const newCustomer = new Customers({
-      clientName,
-      email,
-      number,
-      altNumber,
-      address,
-      city,
-      requirement,
-      remarks,
-      clientlevel,
-      state,
-      contactPerson,
-      gst,
-      source,
-      otherSource,
-      pin,
-      dob,
-      followUpDate,
-      // additionalFollowups : additionalFollowups,
-      latestFollowUpDate:followUpDate,
-      transferred: true,
-      transferredTo: getUser._id,
-      // electricityBill: electricityBillFilename,
-      // pancard: pancardFilename,
-      // adharcard: adharcardFilename,
-      // textRecipe: textRecipeFilename,
-      createBy: req.user._id,
-    });
-    await newCustomer.save();
-
-    getUser.assignedLeads.push(newCustomer._id);
-    await getUser.save();
-
-    const loggedInUser = await Employees.findOne({_id: userId })
-    loggedInUser.transferredLeads.push(newCustomer._id);
-    await loggedInUser.save();
-
-    res.status(200).json({ status: 200, message: "Customer added and transferred successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ status: 500, error: "Internal Server Error" });
-  }
-}
 
 const setCustomerAsLost = async (req, res) => {
   try {
@@ -325,17 +192,12 @@ const get_all_customers = async (req, res) => {
             pin:1,
             dob:1,
             source:1,
-            otherSource:1,
+            url:1,
             followUpDate: 1,
             latestFollowUpDate :1,
             requirement: 1,
             remarks: 1,
-            clientlevel:1,
             additionalFollowups: 1,
-            electricityBill: 1,
-            pancard: 1,
-            adharcard: 1,
-            textRecipe: 1,
             status: 1,
             createdAt:1,
             createBy: 1,
@@ -852,7 +714,6 @@ async function sendOTPEmail(userId, otp) {
 
 module.exports = {
   addCustomer,
-  saveAndTransfer,
   get_all_customers,
   get_todays_leads,
   updateCustomerDetails,

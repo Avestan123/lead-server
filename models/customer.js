@@ -25,6 +25,7 @@ const customerSchema = new mongoose.Schema(
     remarks: { type: String, required: true },
     clientlevel : { type: String},
     source: { type: String },
+    sourceurl:{type: String},
     otherSource: String,
     additionalFollowups: [followupSchema], // Array of followups
     // electricityBill: String,
