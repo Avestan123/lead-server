@@ -12,7 +12,10 @@ const customerSchema = new mongoose.Schema(
     referredBy: { type: String},
     email:  { type: String},
     number: { type: String},
-    clientType:{type:String},
+    clientType:{
+      type:String,
+      enum: ["Project", "Freelance", "IT Staffing", "Non IT Staffing"],
+    },
     requirement: { type: String},
     source: { type: String },
     sourceurl:{type: String},
