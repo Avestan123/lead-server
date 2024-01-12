@@ -14,104 +14,41 @@ const addCustomer = async (req, res) => {
   try {
     const {
       clientName,
+      referredBy,
       email,
       number,
-      altNumber,
-      address,
-      city,
+      clientType,
       requirement,
-      remarks,
-      clientlevel,
-      state,
-      contactPerson,
-      gst,
       source,
       sourceurl,
-      otherSource,
-      pin,
-      dob,
-      followUpDate
+      followUpDate,
+      quotation 
     } = req.body;
     console.log("body data",req.body);
 
     if (!clientName) {
       return res.status(400).json({ error: 'Client Name is required'});
     }
-    if (!number) {
-      return res.status(400).json({ error: 'Number is required'});
-    }
-    const existingCustomer = await Customers.findOne({ number: number });
-    if (existingCustomer) {
-      return res.status(409).json({ error: 'Customer already exists with the number'})
-    }
-    if (!address) {
-      return res.status(400).json({ error: 'Address is required'});
-    }
-  
-    // if (!pin) {
-    //   return res.status(400).json({ error: 'Pin is required'});
-    // }
-    // if (!dob) {
-    //   return res.status(400).json({ error: 'Date Of Birth is required'});
-    // }
-    if (!followUpDate) {
-      return res.status(400).json({ error: 'Follow Up Date is required'});
-    }
-    if (!requirement) {
-      return res.status(400).json({ error: 'Requirement is required'});
-    }
-    if (!remarks) {
-      return res.status(400).json({ error: 'Remarks is required'});
-    }
-   
-
-    // console.log("Client",req.body);
-
-    // if (!req.files || !req.files['electricityBill']) {
-    //     return res.status(400).json({ error: 'Electricity bill is required' });
-    // }
-
-    // const electricityBillFilename = req.files["electricityBill"]
-    //   ? req.files["electricityBill"][0].filename
-    //   : null;
-
-    // const pancardFilename = req.files["pancard"]
-    //   ? req.files["pancard"][0].filename
-    //   : null;
-    // const adharcardFilename = req.files["adharcard"]
-    //   ? req.files["adharcard"][0].filename
-    //   : null;
-    // const textRecipeFilename = req.files["textRecipe"]
-    //   ? req.files["textRecipe"][0].filename
-    //   : null;
-
-    // const additionalFollowups = [{followUpDate : followUpDate, remarks : "default"}]
+     
     const newCustomer = new Customers({
       clientName,
+      referredBy,
       email,
       number,
-     
-      address,
-    
+      clientType,
       requirement,
-      remarks,
       source,
       sourceurl,
-      pin,
       followUpDate,
-      // additionalFollowups : additionalFollowups,
+      quotation ,
       latestFollowUpDate:followUpDate,
-      // electricityBill: electricityBillFilename,
-      // pancard: pancardFilename,
-      // adharcard: adharcardFilename,
-      // textRecipe: textRecipeFilename,
       createBy: req.user._id,
     });
     await newCustomer.save();
     res.status(200).json({ status: 200, message: "Customer added successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ status: 500, error: "Internal Server Error" });
+    res.status(500).json({ status: 500, message:error.message });
   }
 };
 
@@ -133,7 +70,7 @@ const setCustomerAsLost = async (req, res) => {
     res.status(200).json({ status: 200, message: "Customer status updated to lost" })
   } catch (error) {
     console.error(error);
-    res.status(500).json({ status: 500, error: "Internal Server Error" });
+    res.status(500).json({ status: 500, message:error.message });
   }
 };
 
@@ -392,7 +329,7 @@ const get_all_customers = async (req, res) => {
                         });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: 500, message:error.message });
   }
 };
 // get todays leads
@@ -468,7 +405,7 @@ const get_todays_leads = async (req, res) => {
     res.status(200).json({ todaysLeads: todaysLeads });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ status: 500, message:error.message });
   }
 };
 
@@ -572,7 +509,7 @@ const updateCustomerDetails = async (req, res) => {
         });
       } catch (error) {
         console.error(error);
-        return res.status(500).json({ error: 'Internal Server Error - customer update' });
+        res.status(500).json({ status: 500, message:error.message });
       }
     }
 
@@ -590,7 +527,7 @@ const updateCustomerDetails = async (req, res) => {
     res.status(200).json({ status: 200, message: 'Customer details updated', customer: updatedCustomer });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error - customer update' });
+    res.status(500).json({ status: 500, message:error.message });
   }
 };
 

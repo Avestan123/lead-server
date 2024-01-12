@@ -11,10 +11,7 @@ const clientinfoSchema = new mongoose.Schema({
     clientName: {
         type: String,
     },
-    category: {
-        type: String,
-    },
-    contactPersonName: {
+    referredBy: {
         type: String,
     },
     emailID: {

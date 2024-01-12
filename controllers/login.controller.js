@@ -21,7 +21,7 @@ const signin = async (req, res) => {
 
 //Generate JWT token
 function generateAuthToken(employee) {
-    const token = jwt.sign({ _id: employee._id, userId: employee.employeeId, role: employee.employeeRole }, process.env.SECRET_KEY, { expiresIn: '6h' });
+    const token = jwt.sign({ _id: employee._id, userId: employee.employeeId, role: employee.employeeRole }, process.env.SECRET_KEY, { expiresIn: '10h' });
     return token; //Return Token
 }
 
