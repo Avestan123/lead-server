@@ -6,6 +6,7 @@ const User = require('./models/user');
 const path = require('path');
 
 // Import routes
+const publicRoutes = require('./routes/public.routes');  // Import public routes file
 const loginRoutes = require("./routes/loginRoutes")
 const salesRoutes = require('./routes/sales.routes');
 const developerRoutes = require('./routes/developer.routes')
@@ -36,6 +37,8 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
+// Public routes
+app.use(publicRoutes);
 //developer routes
 app.use("/dev", developerRoutes)
 
@@ -83,7 +86,7 @@ app.use("/workOrder", setWorkOrderRoutes);
 // Ensure that a default user exists when the server starts
 createDefaultUser();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
