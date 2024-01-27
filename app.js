@@ -15,6 +15,7 @@ const setWorkOrderRoutes = require('./routes/setWorkOrderRoutes');
 const bodyParser = require('body-parser');  // Add this line
 const bcrypt = require('bcryptjs');
 const checkAuth = require('./middleware/checkAuth')
+const candidateRoutes = require('./routes/candidate.Routes')
 
 // Parse incoming requests with JSON payloads
 app.use(bodyParser.json());
@@ -58,6 +59,9 @@ app.use("/admin", adminRoutes)
 
 // Use routes
 app.use('/sales', salesRoutes);
+
+// Use routes
+app.use('/candidates', candidateRoutes);
 
 
 
