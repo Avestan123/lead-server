@@ -5,7 +5,7 @@ const addCandidate = async (req,res) => {
    try {
     const {
         cName,
-        candidateSource,
+        experience,
         email,
         number,
         education,
@@ -20,7 +20,7 @@ const addCandidate = async (req,res) => {
 
     const candidate = new Candidate({
         cName,
-        candidateSource,
+        experience,
         email,
         number,
         education,

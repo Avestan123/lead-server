@@ -4,7 +4,7 @@ const Employee = require("./employee")
 
 const candidateSchema = new mongoose.Schema({
     cName:{type:String},
-    candidateSource:{type:String},
+    experience:{type:String},
     email:{type:String},
     number:{type:String},
     education:{type:String},
